@@ -16,9 +16,36 @@ namespace TaskManager.Controllers
             _taskService = taskService;
         }
 
-        public IActionResult ListTasks()
+// Sửa phương thức ListTasks để nhận tham số lọc
+        public IActionResult ListTasks(string categoryFilter = null, string priorityFilter = null, string statusFilter = null)
         {
             var tasks = _taskService.GetAllTasks();
+
+            // Áp dụng bộ lọc nếu có
+            if (!string.IsNullOrEmpty(categoryFilter))
+            {
+                int categoryId = _taskService.GetAllCategories().FirstOrDefault(c => c.Name == categoryFilter)?.Id ?? 0;
+                tasks = tasks.Where(t => t.CategoryId == categoryId).ToList();
+            }
+            if (!string.IsNullOrEmpty(priorityFilter))
+            {
+                int priorityId = _taskService.GetAllPriorities().FirstOrDefault(p => p.Name == priorityFilter)?.Id ?? 0;
+                tasks = tasks.Where(t => t.PriorityId == priorityId).ToList();
+            }
+            if (!string.IsNullOrEmpty(statusFilter))
+            {
+                int statusId = _taskService.GetAllStates().FirstOrDefault(s => s.Name == statusFilter)?.Id ?? 0;
+                tasks = tasks.Where(t => t.StatusId == statusId).ToList();
+            }
+
+            // Truyền danh sách để hiển thị trong dropdown
+            ViewBag.Categories = _taskService.GetAllCategories();
+            ViewBag.Priorities = _taskService.GetAllPriorities();
+            ViewBag.States = _taskService.GetAllStates();
+            ViewBag.CurrentCategoryFilter = categoryFilter;
+            ViewBag.CurrentPriorityFilter = priorityFilter;
+            ViewBag.CurrentStatusFilter = statusFilter;
+
             return View(tasks);
         }
 
@@ -26,6 +53,7 @@ namespace TaskManager.Controllers
         {
             ViewBag.Categories = _taskService.GetAllCategories();
             ViewBag.Priorities = _taskService.GetAllPriorities(); // Thêm dòng này
+            ViewBag.States = _taskService.GetAllStates();
             return View();
         }
 

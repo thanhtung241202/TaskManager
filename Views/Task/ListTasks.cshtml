@@ -1,6 +1,40 @@
 @model IEnumerable<TaskManager.Models.TaskItem>
 
 <h2>Danh sách công việc</h2>
+<div class="mb-3">
+    <form asp-action="ListTasks" method="get" class="form-inline">
+        <div class="form-group mr-2">
+            <label for="categoryFilter" class="mr-2">Danh mục:</label>
+            <select name="categoryFilter" class="form-control" onchange="this.form.submit()">
+                <option value="">Tất cả</option>
+                @foreach (var category in ViewBag.Categories)
+                {
+                    <option value="@category.Name" selected="@(category.Name == ViewBag.CurrentCategoryFilter)">@category.Name</option>
+                }
+            </select>
+        </div>
+        <div class="form-group mr-2">
+            <label for="priorityFilter" class="mr-2">Ưu tiên:</label>
+            <select name="priorityFilter" class="form-control" onchange="this.form.submit()">
+                <option value="">Tất cả</option>
+                @foreach (var priority in ViewBag.Priorities)
+                {
+                    <option value="@priority.Name" selected="@(priority.Name == ViewBag.CurrentPriorityFilter)">@priority.Name</option>
+                }
+            </select>
+        </div>
+        <div class="form-group mr-2">
+            <label for="statusFilter" class="mr-2">Trạng thái:</label>
+            <select name="statusFilter" class="form-control" onchange="this.form.submit()">
+                <option value="">Tất cả</option>
+                @foreach (var state in ViewBag.States)
+                {
+                    <option value="@state.Name" selected="@(state.Name == ViewBag.CurrentStatusFilter)">@state.Name</option>
+                }
+            </select>
+        </div>
+    </form>
+</div>
 <a asp-action="CreateTask" class="btn btn-success mb-3">➕ Thêm công việc</a>
 <table class="table table-bordered table-striped">
     <thead class="table-dark">

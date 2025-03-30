@@ -91,7 +91,7 @@ namespace TaskManager.Services
             string userId = GetCurrentUserId();
             return _context.TaskCategories
                 .Where(c => c.UserId == userId)
-                .ToList();
+                .ToList() ?? new List<TaskCategory>();
         }
 
         public void EnsureDefaultCategories()
@@ -120,7 +120,7 @@ namespace TaskManager.Services
             string userId = GetCurrentUserId();
             return _context.TaskPriorities
                 .Where(p => p.UserId == userId)
-                .ToList();
+                .ToList() ?? new List<TaskPriority>();
         }
 
         public void EnsureDefaultPriorities()
@@ -149,7 +149,7 @@ namespace TaskManager.Services
             string userId = GetCurrentUserId();
             return _context.TaskStatuses
                 .Where(s => s.UserId == userId)
-                .ToList();
+                .ToList() ?? new List<TaskState>(); // Đảm bảo không null
         }
 
         public void EnsureDefaultStates()
