@@ -1,15 +1,19 @@
-﻿@model IEnumerable<TaskManager.Models.TaskItem>
+﻿@model List<TaskManager.Models.TaskItem>
 
-<h2>Task List</h2>
-<a asp-controller="Task" asp-action="Create" class="btn btn-success mb-3">Create New</a>
+@{
+    ViewData["Title"] = "Danh sách công việc";
+}
 
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr class="bg-warning">
-            <td>Title</td>
-            <td>Date</td>
-            <td>Is Done</td>
-            <td>Actions</td>
+<h2 class="text-center text-primary">📋 Danh sách công việc</h2>
+
+<table class="table table-bordered table-striped mt-4">
+    <thead class="table-dark">
+        <tr>
+            <th>Tiêu đề</th>
+            <th>Chi tiết</th>
+            <th>Ngày</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
         </tr>
     </thead>
     <tbody>
@@ -17,14 +21,25 @@
         {
             <tr>
                 <td>@item.Title</td>
-                <td>@item.Date.ToString("yyyy-MM-dd")</td>
-                <td>@(item.IsDone ? "✅" : "❌")</td>
+                <td>@item.Details</td>
+                <td>@item.Date.ToString("dd/MM/yyyy")</td>
                 <td>
-                    <a asp-controller="Task" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a> |
-                    <a asp-controller="Task" asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a> |
-                    <a asp-controller="Task" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                    @if (item.Status?.Name == "Xong")
+                    {
+                        <span class="badge bg-success">✅ Hoàn thành</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning text-dark">⏳ @(item.Status?.Name ?? "Chưa có trạng thái")</span>
+                    }
+                </td>
+                <td>
+                    <a href="/Task/EditTask/@item.Id" class="btn btn-warning btn-sm">✏️ Sửa</a>
+                    <a href="/Task/DeleteTask/@item.Id" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa?');">🗑️ Xóa</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+<a href="/Task/CreateTask" class="btn btn-success">➕ Thêm công việc</a>

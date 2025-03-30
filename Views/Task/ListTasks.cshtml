@@ -1,15 +1,15 @@
 @model IEnumerable<TaskManager.Models.TaskItem>
 
-<h2 class="text-center text-primary">📋 Danh sách công việc</h2>
-
+<h2>Danh sách công việc</h2>
 <a asp-action="CreateTask" class="btn btn-success mb-3">➕ Thêm công việc</a>
-
 <table class="table table-bordered table-striped">
     <thead class="table-dark">
         <tr>
             <th>Tiêu đề</th>
-            <th>Ngày</th>
+            <th>Danh mục</th>
+            <th>Ưu tiên</th>
             <th>Trạng thái</th>
+            <th>Ngày</th>
             <th>Hành động</th>
         </tr>
     </thead>
@@ -18,22 +18,43 @@
         {
             <tr>
                 <td>@item.Title</td>
-                <td>@item.Date.ToString("dd/MM/yyyy")</td>
+                <td>@(item.Category?.Name ?? "Chưa phân loại")</td>
                 <td>
-                    @if (item.IsDone)
+                    @if (item.Priority != null)
                     {
-                        <span class="badge bg-success">✅ Hoàn thành</span>
+                        <span style="color: @(item.Priority.Color)">@item.Priority.Name</span>
                     }
                     else
                     {
-                        <span class="badge bg-warning text-dark">⏳ Chưa xong</span>
+                        <span>Chưa ưu tiên</span>
                     }
                 </td>
                 <td>
+                    @if (item.Status != null)
+                    {
+                        @if (item.Status.Name == "Xong")
+                        {
+                            <span class="badge bg-success">✅ @item.Status.Name</span>
+                        }
+                        else if (item.Status.Name == "Đang làm")
+                        {
+                            <span class="badge bg-info">⏳ @item.Status.Name</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark">⏳ @item.Status.Name</span>
+                        }
+                    }
+                    else
+                    {
+                        <span>Chưa có trạng thái</span>
+                    }
+                </td>
+                <td>@item.Date.ToString("dd/MM/yyyy")</td>
+                <td>
                     <a asp-action="EditTask" asp-route-id="@item.Id" class="btn btn-warning btn-sm">✏️ Sửa</a>
                     <a asp-action="DetailsTask" asp-route-id="@item.Id" class="btn btn-info btn-sm">ℹ️ Chi tiết</a>
-                    <a asp-action="DeleteTask" asp-route-id="@item.Id" class="btn btn-danger btn-sm" 
-                       onclick="return confirm('Bạn có chắc chắn muốn xóa?');">🗑️ Xóa</a>
+                    <a asp-action="DeleteTask" asp-route-id="@item.Id" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa?');">🗑️ Xóa</a>
                 </td>
             </tr>
         }

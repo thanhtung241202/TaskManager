@@ -11,5 +11,8 @@ namespace TaskManager.Data
             : base(options) { }
 
         public DbSet<TaskItem> TaskItems { get; set; }
+        public DbSet<TaskCategory> TaskCategories { get; set; }
+        public DbSet<TaskPriority> TaskPriorities { get; set; }
+        public DbSet<TaskState> TaskStatuses { get; set; } // Đổi từ TaskStatus thành TaskState
     }
 }

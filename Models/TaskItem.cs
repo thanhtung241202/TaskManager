@@ -15,9 +15,16 @@ namespace TaskManager.Models
 
         public DateTime Date { get; set; }
 
-        public bool IsDone { get; set; }
-
         [ForeignKey("User")]
         public string UserId { get; set; } = string.Empty;
+
+        public int? CategoryId { get; set; }
+        public TaskCategory? Category { get; set; }
+
+        public int? PriorityId { get; set; }
+        public TaskPriority? Priority { get; set; }
+
+        public int? StatusId { get; set; }
+        public TaskState? Status { get; set; } // Đổi từ TaskStatus thành TaskState
     }
 }
